@@ -8,7 +8,7 @@ api.use(session({
     resave: false,
     saveUninitialized: true,
     cookie: { secure: true }
-  }))
+}))
 
 api.use(passport.initialize())
 api.use(passport.session())
@@ -26,7 +26,14 @@ api.get('/auth/google/callback',
         return res.json(req.user)
     });
 
+api.get('/auth/github',
+    passport.authenticate('github'));
 
+api.get('/auth/github/callback',
+    passport.authenticate('github', { failureRedirect: '/login' }),
+    function (req, res) {
+        return res.json(req.user)
+    })
 api.listen(3000, () => {
     console.log('Rodando na porta 3000')
 })
